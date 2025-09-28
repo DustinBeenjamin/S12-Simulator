@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class S12_IL implements S12_IL_Interface {
@@ -296,32 +298,39 @@ public class S12_IL implements S12_IL_Interface {
         String[] words = filename.trim().split("\\.");
         filename = words[0];
 
-        File outputMemFile = new File(filename + "_memOut" + ".memfile");
+        String memfileName = filename + "_memout" + ".memfile";
 
+
+        //MAKE A NEW FILE, OR BURN THE OLD ONE AND START OVER
         try {
-            //MAKE A NEWFILE
-            if (outputMemFile.createNewFile()) {
-                System.out.println("File created: " + outputMemFile.getName());
-            } else {
-                System.out.println("File already exists. You must delete it first.");
-                return false;
-            }
 
+            //DELETE THE EXISTING FILE IF IT ALREADY EXISTS
+            Files.deleteIfExists(Path.of(memfileName));
+
+            //CREATE A NEW ONE
+            File outputMemFile = new File(memfileName);
+            outputMemFile.createNewFile();
+            System.out.println("File created: " + outputMemFile.getName());
+           
             //ADD THE PROGRAM MEMORY TO THE FILE
+            FileWriter fw = new FileWriter(outputMemFile);
+            
+            //ADD THE PC AND ACCUMULATOR TO THE FIRST LINE SEPARATED BY A SPACE
+            String pcString = this.getProgramCounter();
+            String accumulatorString = this.getAccumulator();
+            fw.write(pcString + " " + accumulatorString + System.lineSeparator());
+            
+            //ADD THE DATA AND THE INSTRUCTIONS 
             int memoryLimit = 1 << PC_BITS; // 2^PC_BITS
-            try (FileWriter writer = new FileWriter(outputMemFile)) {
-                //ADD THE PC AND ACCUMULATOR TO THE FIRST LINE SEPARATED BY A SPACE
-                writer.write(this.getProgramCounter() + " " + this.getAccumulator() + System.lineSeparator());
-
-                //ADD THE DATA AND THE INSTRUCTIONS 
-                for (int i = 0; i < memoryLimit; i++) {
-                    int memoryValue = memory[i] & 0xFFF;
-                    String memoryString = String.format("%12s",
-                            Integer.toBinaryString(memoryValue)).replace(' ', '0');
-                    writer.write(memoryString + System.lineSeparator());
-                }
+            for (int i = 0; i < memoryLimit; i++) {
+                int memoryValue = memory[i] & 0xFFF;
+                String memoryHex = "0x" + (String.format("%2s", Integer.toHexString(i)).replace(" ", "0")).toUpperCase();
+                String memoryString = String.format("%12s", Integer.toBinaryString(memoryValue)).replace(' ', '0');
+                fw.write(memoryHex + " " + memoryString + System.lineSeparator());
             }
 
+            fw.flush();
+            fw.close();
             return true;
 
         //END THE PROGRAM
@@ -341,10 +350,23 @@ public class S12_IL implements S12_IL_Interface {
         String[] splitFilename = filename.split("\\.");
         String traceFilename = splitFilename[0] + ".trace";
 
-        try (FileWriter fw = new FileWriter(new File(traceFilename))) {
+        
+        try  {
+
+            //DELETE THE TRACE FILE IF IT ALREADY EXISTS
+            Files.deleteIfExists(Path.of(traceFilename));
+            
+            //MAKE A NEW ONE
+            FileWriter fw = new FileWriter(new File(traceFilename));
+            
             for (String record : traceRecord) {
-                fw.write(record + System.lineSeparator());
+                if (record != null) {
+                    fw.write(record + System.lineSeparator());
+                }
             }
+            fw.flush();
+            fw.close();
+
             return true;
         } catch (IOException e) {
             System.err.println("Error writing trace file: " + e.getMessage());
@@ -422,7 +444,7 @@ public class S12_IL implements S12_IL_Interface {
     }
    
     public String getAccumulator(){
-        return binaryToS12(String.format("%12s", Integer.toBinaryString(a & 0xFFF)).replace(" ", "."));
+        return String.format("%12s", Integer.toBinaryString(a & 0xFFF)).replace(" ", "0");
     }
 
     public String getNumCyclesExectured(){
@@ -430,8 +452,7 @@ public class S12_IL implements S12_IL_Interface {
     }
 
     public String getProgramCounter(){
-        return binaryToS12(Integer.toBinaryString(pc & 0xFF));
-        
+        return String.format("%8s", Integer.toBinaryString(0xFF & pc)).replace(" ", "0");
     }
 
     public void setIsTimeOptimized(int i) {
