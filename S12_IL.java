@@ -25,14 +25,24 @@ public class S12_IL implements S12_IL_Interface {
     private int N = -1;                                                 //The number of operands that need to be processed by program   
     private int isTimeOptimized = -1;                                   //1 if you are running the timeOptimized benchmark, 0 for the memory optmized, -1 indicates not set
     private String[] traceRecord = new String[50];                      //Each time an instruciton executes, add it to the record of traces.
+    private int traceRecordCount = 0;
 
     public void run(){
         //Iterate through the instructions. When no 'targetCyclesExecuted' value is not provided via 
         //the command line, it defaults to -1. Cycles executed starts at 0.
         while ((cyclesExecuted < targetCyclesExecuted || targetCyclesExecuted == -1) && !halted) {
             cyclesExecuted++;
+            String traceEntry = binaryToS12(String.format("%12s", Integer.toBinaryString(0xFFF & memory[pc])));
             update();
-            traceRecord[cyclesExecuted - 1] = binaryToS12(String.format("%12s", Integer.toBinaryString(0xFFF & memory[pc - 1])));
+            
+            //MAKE TRACE RECORD ARRAY BIGGER IF IT NEEDS MORE SPACE TO HOLD THE RECENT INSTRUCTION
+            if (traceRecordCount == traceRecord.length) {
+                doubleTraceRecord();
+            }
+
+            //ADD THE RECENT INSTRUCTION TO TRACE RECORD ARRAY
+            traceRecordCount++;
+            traceRecord[cyclesExecuted - 1] = traceEntry;
         }
 
         //Finish by writing the final trace
@@ -536,11 +546,7 @@ public class S12_IL implements S12_IL_Interface {
 
     //HALT
     public void HALT(){
-        System.out.println("PROGRAM END");
-        int signedA = (a & 0x800) != 0 ? (a | ~0xFFF) : (a & 0xFFF);
-        System.out.println("ACCUMULATOR: " + signedA);
-
-
+        System.out.println("HALT REACHED");
     }
 
     //Program counter is only 8 bits, so pc++ runs the risk of not overflowing
@@ -558,5 +564,13 @@ public class S12_IL implements S12_IL_Interface {
 
     public void setInputFileName(String n) {
         this.inputFileName = n;
+    }
+
+    public void doubleTraceRecord() {
+        String[] newArray = new String[2 * traceRecord.length];
+        for (int i = 0; i < traceRecord.length; i++) {
+            newArray[i] = traceRecord[i];
+        }
+        traceRecord = newArray;
     }
 }
