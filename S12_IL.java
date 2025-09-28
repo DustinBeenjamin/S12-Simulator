@@ -428,6 +428,8 @@ public class S12_IL implements S12_IL_Interface {
             return null;
         }
         
+        binInstr = String.format("%12s", binInstr).replace(" ", "0");
+
         //CREATE TEMP
         String opcodeString = binInstr.substring(0, OPCODE_BITS);
         String operandString = binInstr.substring(OPCODE_BITS, OPCODE_BITS + OPERAND_BITS);
