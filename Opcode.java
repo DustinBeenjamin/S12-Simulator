@@ -26,10 +26,13 @@ enum Opcode {
     private final int code;
     private String name;
     private static final Opcode[] CODES = new Opcode[16];
-    
+
     static {
         for (Opcode opcode : values()) CODES[opcode.code] = opcode;
     }
+
+    
+    
     
     ///////
     ///////
@@ -46,5 +49,9 @@ enum Opcode {
 
     public static Opcode fromOperand(int code) {
         return (code >= 0 && code < CODES.length) ? CODES[code] : null;
+    }
+
+    public String getName(){
+        return name;
     }
 }
