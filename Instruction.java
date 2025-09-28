@@ -18,4 +18,8 @@ class Instruction {
     public void setOperand(byte o) {
         this.operand = o;
     }
+
+    public int getBinary() {
+        return (opcode.getBinary() << 8) | (0xFF & operand);
+    }
 }
