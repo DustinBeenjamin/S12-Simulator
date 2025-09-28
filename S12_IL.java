@@ -32,7 +32,7 @@ public class S12_IL implements S12_IL_Interface {
         while ((cyclesExecuted < targetCyclesExecuted || targetCyclesExecuted == -1) && !halted) {
             cyclesExecuted++;
             update();
-            traceRecord[traceRecord.length] = binaryToS12(String.format("%12s", Integer.toBinaryString(0xFFF & memory[pc - 1])));
+            traceRecord[cyclesExecuted - 1] = binaryToS12(String.format("%12s", Integer.toBinaryString(0xFFF & memory[pc - 1])));
         }
 
         //Finish by writing the final trace
