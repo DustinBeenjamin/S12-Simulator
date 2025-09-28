@@ -310,7 +310,6 @@ public class S12_IL implements S12_IL_Interface {
             //CREATE A NEW ONE
             File outputMemFile = new File(memfileName);
             outputMemFile.createNewFile();
-            System.out.println("File created: " + outputMemFile.getName());
            
             //ADD THE PROGRAM MEMORY TO THE FILE
             FileWriter fw = new FileWriter(outputMemFile);
@@ -444,7 +443,12 @@ public class S12_IL implements S12_IL_Interface {
     }
    
     public String getAccumulator(){
+
         return String.format("%12s", Integer.toBinaryString(a & 0xFFF)).replace(" ", "0");
+    }
+
+    public int getAccumulatorValue(){
+        return a;
     }
 
     public String getNumCyclesExectured(){
@@ -453,6 +457,10 @@ public class S12_IL implements S12_IL_Interface {
 
     public String getProgramCounter(){
         return String.format("%8s", Integer.toBinaryString(0xFF & pc)).replace(" ", "0");
+    }
+
+    public int getProgramCounterValue() {
+        return this.pc;
     }
 
     public void setIsTimeOptimized(int i) {
@@ -567,7 +575,6 @@ public class S12_IL implements S12_IL_Interface {
 
     //HALT
     public void HALT(){
-        System.out.println("HALT REACHED");
     }
 
     //Program counter is only 8 bits, so pc++ runs the risk of not overflowing

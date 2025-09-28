@@ -2,7 +2,7 @@ public class S12_Sim {
 
     public static void main(String[] args) {
         //<memFile> <optional: -o outputFileBaseName> <optional: -c cyclesToExecute>
-        String[] tempArgs = {"add.memfile"};
+        String[] tempArgs = {"sub.memfile"};
         S12_IL sim = new S12_IL();
         
         try {
@@ -57,9 +57,9 @@ public class S12_Sim {
         //Start the program
         sim.run();
         //Print Results
-        System.out.println(sim.getNumCyclesExectured());
-        System.out.println(sim.getProgramCounter());
-        System.out.println(sim.getAccumulator());
+        System.out.println("Cycles Executed: " + sim.getNumCyclesExectured());
+        System.out.println("PC: 0x" + String.format("%2s", Integer.toHexString(sim.getProgramCounterValue())).replace(" ", "0").toUpperCase());
+        System.out.println("ACC: 0x" + String.format("%3s", Integer.toHexString(sim.getAccumulatorValue())).replace(" ", "0").toUpperCase());
         
         
     } 
