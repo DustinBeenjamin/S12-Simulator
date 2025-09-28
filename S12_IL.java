@@ -57,7 +57,7 @@ public class S12_IL implements S12_IL_Interface {
             if (scan.hasNext()) {
                 temp = scan.next();
                 if (temp.length() != PC_BITS) {
-                    throw new Exception("ERROR: Program counter incorrect number of bits in memfile");
+                    throw new Exception("ERROR: Program counter incorrect number of bits in memfile. Found " + temp.length() + " but expected " + PC_BITS);
                 } 
             } else {
                 throw new Exception("ERROR: Did not find PC bits as the first entry in memfile.");
@@ -79,6 +79,7 @@ public class S12_IL implements S12_IL_Interface {
             int i = 0;
             while (scan.hasNext()) {
                 if (i > memory.length) {throw new Exception("ERROR: Memfile has more instructions than memory can fit.");} 
+                scan.next();
                 temp = scan.next();
                 if (temp.length() != MEMORY_BITS) {throw new Exception("ERROR: Memfile has incorrect number of bits on line " + (i + 1));}
                 if (!temp.matches("[01]+")) throw new Exception("ERROR: Non-binary pattern in memfile: " + temp);
