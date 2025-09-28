@@ -48,8 +48,14 @@ public class S12_IL implements S12_IL_Interface {
         }
 
         //Finish by writing the final trace
-        writeTrace(inputFileName);
-        writeMem(inputFileName);
+        if (outputFileName != null){
+            writeTrace(outputFileName);
+            writeMem(outputFileName);
+
+        } else {
+            writeTrace(inputFileName);
+            writeMem(inputFileName);
+        }
     }
 
     /**
@@ -347,8 +353,7 @@ public class S12_IL implements S12_IL_Interface {
      */
     public boolean writeTrace(String filename) {
         String[] splitFilename = filename.split("\\.");
-        String traceFilename = splitFilename[0] + ".trace";
-
+        String traceFilename = splitFilename[0] + "_trace.trace";
         
         try  {
 

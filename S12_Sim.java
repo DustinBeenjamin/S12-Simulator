@@ -2,7 +2,7 @@ public class S12_Sim {
 
     public static void main(String[] args) {
         //<memFile> <optional: -o outputFileBaseName> <optional: -c cyclesToExecute>
-        String[] tempArgs = {"sub.memfile"};
+        String[] tempArgs = {"sub.memfile", "-c", "2", "-o", "fuck"};
         S12_IL sim = new S12_IL();
         
         try {
@@ -28,14 +28,17 @@ public class S12_Sim {
             for (int i = 1; i < tempArgs.length; i += 2) {
                 switch (tempArgs[i]) {
                     case "-o":
-                    //Set the output file name
-                    sim.setOutputFileName(tempArgs[i + 1]);
-                    break;
+                        //Set the output file name
+                        sim.setOutputFileName(tempArgs[i + 1]);
+                        break;
+
                     case "-c":
-                    //Verify that flag passes an integer. Parse Int throws exception if cast is not possible.
-                    int numClocks = Integer.parseInt(tempArgs[i+1]);
-                    sim.setTargetCycles(numClocks);
-                    break;
+                        //Verify that flag passes an integer. Parse Int throws exception if cast is not possible.
+                        int numClocks = Integer.parseInt(tempArgs[i+1]);
+                        sim.setTargetCycles(numClocks);
+                        break;
+
+
                     default:
                     System.out.println("ERROR: Unrecognized optional argument. " + tempArgs[i]);
                     System.out.println("<memFile> <optional: -o outputFileBaseName> <optional: -c cyclesToExecute>");
