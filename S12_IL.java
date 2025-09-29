@@ -17,7 +17,7 @@ public class S12_IL implements S12_IL_Interface {
     private int pc = 0;                                                 //Program Counter
     private int cyclesExecuted = 0;                                     //The running number of instructions executed
     private int targetCyclesExecuted = -1;                              //Use -1 to indicate that user has not indicated a target num of clocks.
-    private int[] memory = new int[(int) (Math.pow(2, A_BITS) - 1)];  //Instructions and Data  
+    private int[] memory = new int[(int) (Math.pow(2, PC_BITS))];  //Instructions and Data  
     private File memFile;                                               //The 12-bit instruction and data file formatted in binary
     private String inputFileName;
     private String outputFileName = null;                               //Name for optional output file (binary formatted)
@@ -35,6 +35,9 @@ public class S12_IL implements S12_IL_Interface {
         while ((cyclesExecuted < targetCyclesExecuted || targetCyclesExecuted == -1) && !halted) {
             cyclesExecuted++;
             String traceEntry = binaryToS12(String.format("%12s", Integer.toBinaryString(0xFFF & memory[pc])));
+            
+
+            
             update();
             
             //MAKE TRACE RECORD ARRAY BIGGER IF IT NEEDS MORE SPACE TO HOLD THE RECENT INSTRUCTION
@@ -95,9 +98,8 @@ public class S12_IL implements S12_IL_Interface {
 
             //PARSE THE INSTRUCTIONS AND DATA INTO MEMORY
             int i = 0;
-            while (scan.hasNext()) {
-                if (i > memory.length) {throw new Exception("ERROR: Memfile has more instructions than memory can fit.");} 
-                scan.next();
+            while (scan.hasNext() && i < memory.length - 1) {
+                String hexAddress = scan.next();
                 temp = scan.next();
                 if (temp.length() != MEMORY_BITS) {throw new Exception("ERROR: Memfile has incorrect number of bits on line " + (i + 1));}
                 if (!temp.matches("[01]+")) throw new Exception("ERROR: Non-binary pattern in memfile: " + temp);
@@ -179,6 +181,10 @@ public class S12_IL implements S12_IL_Interface {
                 HALT();
                 halted = true;
             }
+        int product = 0xFFF & memory[255];
+        int adding = 0xFFF & memory[254];
+        int i = 0xFFF & memory[253];
+        int j = 0xFFF & memory[252];
 
         //return the instruction binary as a string
         return instructionBinary;

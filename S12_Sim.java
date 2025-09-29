@@ -2,7 +2,7 @@ public class S12_Sim {
 
     public static void main(String[] args) {
         //<memFile> <optional: -o outputFileBaseName> <optional: -c cyclesToExecute>
-        String[] tempArgs = {"N-Multiplication_Time_Optimized.memfile"};
+        String[] tempArgs = {"mem_efficient.memfile"};
         S12_IL sim = new S12_IL();
         
         try {

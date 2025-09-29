@@ -1,0 +1,256 @@
+JZ 1F
+SUB FB
+STORE FD
+LOAD 21
+JZ 1F
+STORE FF
+LOAD FD
+JZ 1E
+LOAD FD
+JZ 1E
+SUB FB
+STORE FD
+LOAD 22
+JZ 1F
+SUB FB
+STORE FC
+LOAD FF
+STORE FE
+LOAD FC
+JZ 1A
+SUB FB
+STORE FC
+LOAD FF
+ADD FE
+STORE FF
+JMP 12
+LOAD 0C
+ADD FB
+STORE 0C
+JMP 08
+HALT 00
+STORE FF
+JMP 1E
+JMP 05
+JMP 04
+JMP 03
+JMP 02
+JMP 01
+JMP 00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JMP 01
+JMP 00
+JMP 00
+JMP 00
+JMP 00
